@@ -6,12 +6,13 @@
 
 void apInit(void)
 {
-
+  cliOpen(_DEF_UART1, 115200);
 }
 
 void apMain(void)
 {
   uint32_t pre_time;
+
 
   pre_time = millis();
   while(1)
@@ -23,5 +24,8 @@ void apMain(void)
       ledToggle(_DEF_LED2);
       ledToggle(_DEF_LED3);
     }    
+
+    cliMain();
   }
+
 }

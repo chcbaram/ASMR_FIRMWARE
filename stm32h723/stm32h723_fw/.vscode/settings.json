@@ -2,6 +2,8 @@
   "files.associations": {
     "led.h": "c",
     "hw_def.h": "c",
-    "stm32h7xx_hal.h": "c"
+    "stm32h7xx_hal.h": "c",
+    "cstdio": "c",
+    "*.tcc": "c"
   }
 }
