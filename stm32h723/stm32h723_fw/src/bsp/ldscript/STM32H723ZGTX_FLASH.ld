@@ -54,10 +54,16 @@ MEMORY
 /* Define output sections */
 SECTIONS
 {
+  .fw_flash_begin :
+  {
+    _fw_flash_begin = .;
+  } >FLASH
+
   /* The startup code goes first into FLASH */
   .isr_vector :
   {
     . = ALIGN(4);
+
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >FLASH
@@ -133,6 +139,7 @@ SECTIONS
 
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
+
   } >RAM_D1 AT> FLASH
 
   /* Uninitialized data section */
@@ -161,6 +168,11 @@ SECTIONS
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
   } >RAM_D1
+
+  .fw_flash_end :
+  {
+    _fw_flash_end = .;
+  } >FLASH
 
   /* Remove information from the standard libraries */
   /DISCARD/ :
