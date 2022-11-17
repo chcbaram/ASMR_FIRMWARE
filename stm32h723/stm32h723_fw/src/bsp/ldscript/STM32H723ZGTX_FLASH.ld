@@ -45,7 +45,11 @@ MEMORY
 {
   ITCMRAM (xrw)    : ORIGIN = 0x00000000,   LENGTH = 64K
   DTCMRAM (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
-  FLASH    (rx)    : ORIGIN = 0x08000000,   LENGTH = 1024K
+
+  VECTOR   (rx)    : ORIGIN = 0x08000000,   LENGTH = 1K
+  TAG      (rx)    : ORIGIN = 0x08000400,   LENGTH = 1K
+  FLASH    (rx)    : ORIGIN = 0x08000800,   LENGTH = 1022K
+
   RAM_D1  (xrw)    : ORIGIN = 0x24000000,   LENGTH = 320K
   RAM_D2  (xrw)    : ORIGIN = 0x30000000,   LENGTH = 32K
   RAM_D3  (xrw)    : ORIGIN = 0x38000000,   LENGTH = 16K
@@ -57,7 +61,7 @@ SECTIONS
   .fw_flash_begin :
   {
     _fw_flash_begin = .;
-  } >FLASH
+  } >VECTOR
 
   /* The startup code goes first into FLASH */
   .isr_vector :
@@ -65,8 +69,17 @@ SECTIONS
     . = ALIGN(4);
 
     KEEP(*(.isr_vector)) /* Startup code */
+
     . = ALIGN(4);
-  } >FLASH
+  } >VECTOR
+
+  .tag :
+  {
+    . = ALIGN(4);
+    KEEP(*(.tag))
+    . = ALIGN(4);
+  } >TAG
+
 
   /* The program code and other data goes into FLASH */
   .text :
