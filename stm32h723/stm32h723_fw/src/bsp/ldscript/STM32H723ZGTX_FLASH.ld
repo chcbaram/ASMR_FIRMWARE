@@ -182,6 +182,13 @@ SECTIONS
     . = ALIGN(8);
   } >RAM_D1
 
+  .noinit :
+  {
+    . = ALIGN(4);
+    KEEP(*(.noinit))
+    . = ALIGN(4);
+  } >RAM_D3
+
   .fw_flash_end :
   {
     _fw_flash_end = .;
