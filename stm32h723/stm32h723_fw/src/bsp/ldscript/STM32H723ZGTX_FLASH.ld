@@ -182,7 +182,7 @@ SECTIONS
     . = ALIGN(8);
   } >RAM_D1
 
-  .noinit :
+  .noinit(NOLOAD) :
   {
     . = ALIGN(4);
     KEEP(*(.noinit))

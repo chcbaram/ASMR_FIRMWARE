@@ -20,45 +20,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "bsp.h"
 #include "stm32h7xx_it.h"
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-/* USER CODE END Includes */
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN TD */
 
-/* USER CODE END TD */
 
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
+extern fault_log_t fault_log;
 
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
-/* External variables --------------------------------------------------------*/
-
-/* USER CODE BEGIN EV */
-
-/* USER CODE END EV */
 
 /******************************************************************************/
 /*           Cortex Processor Interruption and Exception Handlers          */
@@ -68,28 +34,33 @@
   */
 void NMI_Handler(void)
 {
-  /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
-
-  /* USER CODE END NonMaskableInt_IRQn 0 */
-  /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
   while (1)
   {
   }
-  /* USER CODE END NonMaskableInt_IRQn 1 */
 }
 
 /**
   * @brief This function handles Hard fault interrupt.
   */
-void HardFault_Handler(void)
+void HardFault_Handler_C(uint32_t *p_stack)
 {
-  /* USER CODE BEGIN HardFault_IRQn 0 */
 
-  /* USER CODE END HardFault_IRQn 0 */
+  fault_log.magic_number = 0x5555AAAA;
+  fault_log.type = 0;
+
+  fault_log.REG_R0  = p_stack[0];  // Register R0
+  fault_log.REG_R1  = p_stack[1];  // Register R1
+  fault_log.REG_R2  = p_stack[2];  // Register R2
+  fault_log.REG_R3  = p_stack[3];  // Register R3
+  fault_log.REG_R12 = p_stack[4];  // Register R12
+  fault_log.REG_LR  = p_stack[5];  // Link register LR
+  fault_log.REG_PC  = p_stack[6];  // Program counter PC
+  fault_log.REG_PSR = p_stack[7];  // Program status word PSR
+
+  NVIC_SystemReset();
+
   while (1)
   {
-    /* USER CODE BEGIN W1_HardFault_IRQn 0 */
-    /* USER CODE END W1_HardFault_IRQn 0 */
   }
 }
 
@@ -98,13 +69,8 @@ void HardFault_Handler(void)
   */
 void MemManage_Handler(void)
 {
-  /* USER CODE BEGIN MemoryManagement_IRQn 0 */
-
-  /* USER CODE END MemoryManagement_IRQn 0 */
   while (1)
   {
-    /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
-    /* USER CODE END W1_MemoryManagement_IRQn 0 */
   }
 }
 
@@ -113,13 +79,8 @@ void MemManage_Handler(void)
   */
 void BusFault_Handler(void)
 {
-  /* USER CODE BEGIN BusFault_IRQn 0 */
-
-  /* USER CODE END BusFault_IRQn 0 */
   while (1)
   {
-    /* USER CODE BEGIN W1_BusFault_IRQn 0 */
-    /* USER CODE END W1_BusFault_IRQn 0 */
   }
 }
 
@@ -128,13 +89,8 @@ void BusFault_Handler(void)
   */
 void UsageFault_Handler(void)
 {
-  /* USER CODE BEGIN UsageFault_IRQn 0 */
-
-  /* USER CODE END UsageFault_IRQn 0 */
   while (1)
   {
-    /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
-    /* USER CODE END W1_UsageFault_IRQn 0 */
   }
 }
 
@@ -143,12 +99,6 @@ void UsageFault_Handler(void)
   */
 void SVC_Handler(void)
 {
-  /* USER CODE BEGIN SVCall_IRQn 0 */
-
-  /* USER CODE END SVCall_IRQn 0 */
-  /* USER CODE BEGIN SVCall_IRQn 1 */
-
-  /* USER CODE END SVCall_IRQn 1 */
 }
 
 /**

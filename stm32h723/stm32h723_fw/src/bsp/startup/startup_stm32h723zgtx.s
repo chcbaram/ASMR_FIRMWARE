@@ -107,11 +107,24 @@ LoopFillZerobss:
  * @param  None
  * @retval None
 */
-    .section  .text.Default_Handler,"ax",%progbits
+  .section  .text.Default_Handler,"ax",%progbits
 Default_Handler:
 Infinite_Loop:
   b  Infinite_Loop
   .size  Default_Handler, .-Default_Handler
+
+
+.section  .text.HardFault_Asm_Handler,"ax",%progbits
+HardFault_Asm_Handler:
+  ;// This version is for Cortex M3, Cortex M4 and Cortex M4F
+  tst    LR, #4               ;// Check EXC_RETURN in Link register bit 2.
+  ite    EQ
+  mrseq  R0, MSP              ;// Stacking was using MSP.
+  mrsne  R0, PSP              ;// Stacking was using PSP.
+  b      HardFault_Handler_C  ;// Stack pointer passed through R0.
+.size  HardFault_Asm_Handler, .-HardFault_Asm_Handler
+
+
 /******************************************************************************
 *
 * The minimal vector table for a Cortex M. Note that the proper constructs
@@ -319,7 +332,7 @@ g_pfnVectors:
    .thumb_set NMI_Handler,Default_Handler
 
    .weak      HardFault_Handler
-   .thumb_set HardFault_Handler,Default_Handler
+   .thumb_set HardFault_Handler,HardFault_Asm_Handler
 
    .weak      MemManage_Handler
    .thumb_set MemManage_Handler,Default_Handler
